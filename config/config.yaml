@@ -1,0 +1,28 @@
+project:
+  name: kasparro-agentic-fb-analyst
+  seed: 42
+
+data:
+  dataset_path: "data/sample_fb_ads.csv"
+  use_sample: true
+
+thresholds:
+  low_ctr: 0.015        
+  low_roas: 1.2         
+  fatigue_drop: 0.25   
+
+features:
+  enable_memory: false
+  enable_forecast: false
+  enable_data_quality_checks: true
+  enable_creative_cluster_analysis: true
+
+logging:
+  save_logs: true
+  log_path: "logs/"
+
+agents:
+  planner_model: "gpt-4o-mini"
+  insight_model: "gpt-4o-mini"
+  creative_model: "gpt-4o-mini"
+  evaluator_model: "gpt-4o-mini"
