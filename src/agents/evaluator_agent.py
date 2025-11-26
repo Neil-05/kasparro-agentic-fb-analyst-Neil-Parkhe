@@ -16,7 +16,7 @@ class EvaluatorAgent:
                     "issue": "Low CTR",
                     "value": float(avg_ctr),
                     "threshold": float(threshold),
-                    "valid": avg_ctr < threshold
+                    "valid": bool(avg_ctr < threshold)   # FIX HERE
                 })
 
             if h["issue"] == "Low ROAS":
@@ -27,7 +27,7 @@ class EvaluatorAgent:
                     "issue": "Low ROAS",
                     "value": float(avg_roas),
                     "threshold": float(threshold),
-                    "valid": avg_roas < threshold
+                    "valid": bool(avg_roas < threshold)   # FIX HERE
                 })
 
         return validated
