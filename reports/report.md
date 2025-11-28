@@ -4,8 +4,8 @@
 [
   {
     "issue": "Low CTR",
-    "value": 0.013065511111111112,
-    "threshold": 0.015,
+    "value": 0.010833333333333334,
+    "threshold": 0.012,
     "valid": true
   }
 ]
@@ -13,46 +13,46 @@
 ## Creative Suggestions
 [
   {
-    "campaign": "Men_ComfortMax_Launch",
-    "old_message": "Cooling mesh panels for workouts \u2014 men athletic briefs you\u2019ll actually love.",
+    "campaign": "Winter_Sale",
+    "old_message": "Warm jackets now 30% off",
     "new_creatives": [
-      "Try highlighting benefits: Cooling mesh panels for workouts \u2014 men athletic briefs you\u2019ll actually love.",
+      "Try highlighting benefits: Warm jackets now 30% off",
       "Add urgency-based CTA: 'Limited Time Offer!'",
       "Use more emotional storytelling in copy"
     ]
   },
   {
-    "campaign": "Men Comfortmax Launch",
-    "old_message": "Breathable bamboo that moves with you \u2014 limited offer on men boxers.",
+    "campaign": "Festival_Promo",
+    "old_message": "New festive wear collection",
     "new_creatives": [
-      "Try highlighting benefits: Breathable bamboo that moves with you \u2014 limited offer on men boxers.",
+      "Try highlighting benefits: New festive wear collection",
       "Add urgency-based CTA: 'Limited Time Offer!'",
       "Use more emotional storytelling in copy"
     ]
   },
   {
-    "campaign": "MEN COMFORTMAX LAUNCH",
-    "old_message": "Seamless confidence for every day \u2014 new men athletic briefs.",
+    "campaign": "Winter_Sale",
+    "old_message": "Upgrade your winter style",
     "new_creatives": [
-      "Try highlighting benefits: Seamless confidence for every day \u2014 new men athletic briefs.",
+      "Try highlighting benefits: Upgrade your winter style",
       "Add urgency-based CTA: 'Limited Time Offer!'",
       "Use more emotional storytelling in copy"
     ]
   },
   {
-    "campaign": "Men ComfortMax Launch",
-    "old_message": "Seamless confidence for every day \u2014 new men athletic briefs.",
+    "campaign": "Festival_Promo",
+    "old_message": "Special festive combo offer",
     "new_creatives": [
-      "Try highlighting benefits: Seamless confidence for every day \u2014 new men athletic briefs.",
+      "Try highlighting benefits: Special festive combo offer",
       "Add urgency-based CTA: 'Limited Time Offer!'",
       "Use more emotional storytelling in copy"
     ]
   },
   {
-    "campaign": "Men_ComfortMax_Launch",
-    "old_message": "Hot & comfy: men inner vests now 20% off \u2014 feel the difference.",
+    "campaign": "Clearance",
+    "old_message": "Last chance sale \u2013 limited stock",
     "new_creatives": [
-      "Try highlighting benefits: Hot & comfy: men inner vests now 20% off \u2014 feel the difference.",
+      "Try highlighting benefits: Last chance sale \u2013 limited stock",
       "Add urgency-based CTA: 'Limited Time Offer!'",
       "Use more emotional storytelling in copy"
     ]

@@ -2,7 +2,8 @@ import yaml
 import json
 import time
 from pathlib import Path
-
+import argparse
+import os
 from src.agents.planner_agent import PlannerAgent
 from src.agents.data_agent import DataAgent
 from src.agents.insight_agent import InsightAgent
@@ -99,6 +100,25 @@ class Orchestrator:
             raise e
 
 
+
+
 if __name__ == "__main__":
-    orchestrator = Orchestrator()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--config",
+        type=str,
+        default=None,
+        help="Path to config YAML"
+    )
+    args = parser.parse_args()
+
+    # Priority: CLI > ENV > Default
+    config_path = (
+        args.config
+        or os.environ.get("DATA_CONFIG")
+        or "config/config.yaml"
+    )
+
+    orchestrator = Orchestrator(config_path=config_path)
     orchestrator.run("Analyze ROAS drop")
+

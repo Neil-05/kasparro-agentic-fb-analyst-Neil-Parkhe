@@ -1,0 +1,6 @@
+data:
+  dataset_path: data/sample_small.csv
+
+thresholds:
+  low_ctr: 0.012
+  low_roas: 1.5
