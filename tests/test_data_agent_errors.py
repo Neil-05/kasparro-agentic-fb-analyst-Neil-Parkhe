@@ -25,12 +25,15 @@ def test_data_agent_empty_file(tmp_path):
 def test_data_agent_invalid_numeric(tmp_path):
     bad_numeric_file = tmp_path / "bad_numeric.csv"
     df = pd.DataFrame({
-        "date": ["2024-01-01"],
-        "spend": ["not_number"],
-        "ctr": ["bad"],
-        "roas": ["bad"],
-        "country": ["US"]
-    })
+    "date": ["2024-01-01"],
+    "country": ["US"],
+    "spend": ["not_number"],
+    "ctr": ["bad"],
+    "roas": ["bad"],
+    "campaign": ["A"],
+    "message": ["sample creative"]
+})
+
     df.to_csv(bad_numeric_file, index=False)
 
     agent = DataAgent()

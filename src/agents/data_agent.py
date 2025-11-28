@@ -2,8 +2,7 @@ import pandas as pd
 import time
 from loguru import logger
 
-REQUIRED_COLUMNS = ["date", "country", "spend", "ctr", "roas"]
-
+REQUIRED_COLUMNS = ["date", "country", "spend", "ctr", "roas", "campaign", "message"]
 
 class DataAgent:
 
@@ -16,22 +15,19 @@ class DataAgent:
             try:
                 df = pd.read_csv(path)
 
-                # ❌ Empty CSV
+                # Empty check
                 if df.empty:
                     raise ValueError("Dataset is empty")
 
-                # ❌ Validate numeric columns before checking required columns
-                numeric_cols = ["ctr", "roas", "spend"]
-                for col in numeric_cols:
-                    if col in df.columns:
-                        # if conversion produces NaN → invalid numbers present
-                        if not pd.to_numeric(df[col], errors="coerce").notna().all():
-                            raise ValueError(f"Invalid numeric values detected in '{col}'")
+                # Required schema check
+                missing_cols = [c for c in REQUIRED_COLUMNS if c not in df.columns]
+                if missing_cols:
+                    raise KeyError(f"Missing required columns: {missing_cols}")
 
-                # ❌ Missing required columns
-                missing = [c for c in REQUIRED_COLUMNS if c not in df.columns]
-                if missing:
-                    raise KeyError(f"Missing required columns: {missing}")
+                # Validate numeric columns
+                for col in ["spend", "ctr", "roas"]:
+                    if not pd.api.types.is_numeric_dtype(df[col]):
+                        raise ValueError(f"Invalid numeric value in column: {col}")
 
                 logger.bind(agent="data", step="load_success", rows=len(df)).info("Data loaded")
                 return df
@@ -43,7 +39,6 @@ class DataAgent:
                 )
                 time.sleep(delay)
 
-        # Final failure
         logger.bind(agent="data", step="load_failed").error("Failed after retries")
         raise last_error
 
@@ -53,5 +48,5 @@ class DataAgent:
             "total_spend": float(df["spend"].sum()),
             "avg_ctr": float(df["ctr"].mean()),
             "avg_roas": float(df["roas"].mean()),
-            "top_countries": df["country"].value_counts().to_dict(),
+            "top_countries": df["country"].value_counts().head(3).to_dict()
         }
