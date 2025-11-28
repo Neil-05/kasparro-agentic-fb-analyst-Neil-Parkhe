@@ -21,7 +21,7 @@ run:
 	python3 -m src.orchestrator.run
 
 test:
-	pytest
+	python -m pytest
 
 
 lint:
