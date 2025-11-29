@@ -232,6 +232,11 @@ Exception: DataAgent: Failed to load CSV after retries
 * Documentation of failure modes
 * Test coverage for retry logic, schema validation, and alternate configs
 
+## P2 Enchancements
+
+* Memory for short runs
+* Basic quality scoring agent
+
 ---
 
 ## Release
@@ -259,6 +264,8 @@ v2.0.0
 * [x] PR with self-review
 * [x] Dynamic config switching
 * [x] Sample dataset included
+* [x] Memory for short runs
+* [x] Basic quality scoring logic
 
 ---
 
