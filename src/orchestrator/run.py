@@ -1,124 +1,68 @@
 import yaml
 import json
-import time
 from pathlib import Path
-import argparse
-import os
+from loguru import logger
+
 from src.agents.planner_agent import PlannerAgent
 from src.agents.data_agent import DataAgent
 from src.agents.insight_agent import InsightAgent
 from src.agents.evaluator_agent import EvaluatorAgent
 from src.agents.creative_agent import CreativeAgent
-from loguru import logger
+from src.agents.memory_agent import MemoryAgent  
 
 
 class Orchestrator:
     def __init__(self, config_path="config/config.yaml"):
         self.config = yaml.safe_load(open(config_path, "r"))
-
         self.planner = PlannerAgent()
         self.data_agent = DataAgent()
         self.insight_agent = InsightAgent()
         self.evaluator = EvaluatorAgent(self.config)
         self.creative_agent = CreativeAgent()
+        self.memory = MemoryAgent()  
 
     def run(self, query="Analyze ROAS drop"):
         print("\n--- Running Agentic System ---\n")
+        logger.add("logs/system.json", rotation="1 MB", backtrace=True, diagnose=True, serialize=True)
+        logger.bind(stage="orchestrator").info("Pipeline started")
+        logger.info(f"Starting Agentic Pipeline Run for query: {query}")
+        logger.info("Memory: loading existing memory (if any)")
+        mem_state = self.memory.load()
+        logger.info("Memory loaded: {} past runs", len(mem_state.get("runs", [])))
+        plan = self.planner.plan(query)
+        print("Planner Output:", plan)
+        dataset_path = self.config["data"]["dataset_path"]
+        df = self.data_agent.load_data(dataset_path)
+        summary = self.data_agent.summarize(df)
+        print("Data Summary:", summary)
 
-        # Structured JSON logging
-        logger.add(
-            "logs/system.json",
-            rotation="1 MB",
-            serialize=True,
-            backtrace=True,
-            diagnose=True,
-        )
+        hypotheses = self.insight_agent.generate_hypotheses(summary)
+        print("Hypotheses:", hypotheses)
 
+        validated = self.evaluator.evaluate(df, hypotheses)
+        print("Validated Insights:", validated)
+
+        creatives = self.creative_agent.generate_creatives(df)
+        print("Creative Suggestions:", creatives)
+        logger.info("Memory: updating memory with this run's insights")
         try:
-            logger.bind(stage="orchestrator").info("Pipeline started")
-            logger.bind(stage="planner", input=query).info("Planner started")
-            plan = self.planner.plan(query)
-            logger.bind(stage="planner", output=plan).info("Planner completed")
-            print("Planner Output:", plan)
-
-           
-            dataset_path = self.config["data"]["dataset_path"]
-            logger.bind(stage="data_agent", input=dataset_path).info("Data loading started")
-
-            df = self.data_agent.load_data(dataset_path)
-
-            logger.bind(stage="data_agent", output=f"{len(df)} rows").info("Data loading completed")
-
-         
-            logger.bind(stage="data_summary").info("Summary generation started")
-
-            summary = self.data_agent.summarize(df)
-
-            logger.bind(stage="data_summary", output=summary).info("Summary completed")
-            print("Data Summary:", summary)
-
-            
-            logger.bind(stage="insight_agent", input=summary).info("Insight generation started")
-
-            hypotheses = self.insight_agent.generate_hypotheses(summary)
-
-            logger.bind(stage="insight_agent", output=hypotheses).info("Insight generation completed")
-            print("Hypotheses:", hypotheses)
-            logger.bind(stage="evaluator", input=hypotheses).info("Evaluation started")
-
-            validated = self.evaluator.evaluate(df, hypotheses)
-
-            logger.bind(stage="evaluator", output=validated).info("Evaluation completed")
-            print("Validated Insights:", validated)
-            logger.bind(stage="creative_agent").info("Creative generation started")
-
-            creatives = self.creative_agent.generate_creatives(df)
-
-            logger.bind(stage="creative_agent", output=creatives).info("Creative generation completed")
-            print("Creative Suggestions:", creatives)
-
-            Path("reports").mkdir(exist_ok=True)
-
-            with open("reports/insights.json", "w") as f:
-                json.dump(validated, f, indent=2)
-
-            with open("reports/creatives.json", "w") as f:
-                json.dump(creatives, f, indent=2)
-
-            with open("reports/report.md", "w") as f:
-                f.write("# Final Marketing Report\n\n")
-                f.write("## Validated Insights\n")
-                f.write(json.dumps(validated, indent=2))
-                f.write("\n\n## Creative Suggestions\n")
-                f.write(json.dumps(creatives, indent=2))
-
-            logger.bind(stage="orchestrator").info("Pipeline finished successfully")
-            print("\nOutputs saved to reports/ directory\n")
-
+            self.memory.update_from_run(summary, validated)
         except Exception as e:
-            logger.bind(stage="error", exception=str(e)).error("Pipeline failed with exception")
-            raise e
+            logger.error("Memory update failed: {}", e)
 
+        Path("reports").mkdir(exist_ok=True)
 
+        with open("reports/insights.json", "w") as f:
+            json.dump(validated, f, indent=2)
 
+        with open("reports/creatives.json", "w") as f:
+            json.dump(creatives, f, indent=2)
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--config",
-        type=str,
-        default=None,
-        help="Path to config YAML"
-    )
-    args = parser.parse_args()
+        with open("reports/report.md", "w") as f:
+            f.write("# Final Marketing Report\n\n")
+            f.write("## Validated Insights\n")
+            f.write(json.dumps(validated, indent=2))
+            f.write("\n\n## Creative Suggestions\n")
+            f.write(json.dumps(creatives, indent=2))
 
-    # Priority: CLI > ENV > Default
-    config_path = (
-        args.config
-        or os.environ.get("DATA_CONFIG")
-        or "config/config.yaml"
-    )
-
-    orchestrator = Orchestrator(config_path=config_path)
-    orchestrator.run("Analyze ROAS drop")
-
+        print("\nOutputs saved to reports/ directory\n")
