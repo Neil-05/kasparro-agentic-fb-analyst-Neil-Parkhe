@@ -1,8 +1,8 @@
 [
   {
     "issue": "Low CTR",
-    "value": 0.010833333333333334,
-    "threshold": 0.012,
+    "value": 0.013065511111111112,
+    "threshold": 0.015,
     "valid": true
   }
 ]

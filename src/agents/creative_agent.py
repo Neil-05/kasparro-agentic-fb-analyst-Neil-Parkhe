@@ -1,7 +1,11 @@
 from loguru import logger
+from src.agents.creative_score_agent import CreativeScoreAgent
 
 
 class CreativeAgent:
+    def __init__(self):
+        self.scorer = CreativeScoreAgent()   # scoring engine added
+
     def generate_creatives(self, df):
         logger.bind(agent="creative", step="start").info("Generating creative suggestions")
 
@@ -21,6 +25,10 @@ class CreativeAgent:
                     "Use more emotional storytelling in copy"
                 ]
             }
+
+            # FIX: score correct variable
+            scored = self.scorer.score(msg)
+            suggestion["score"] = scored["score"]
 
             logger.bind(agent="creative", suggestion=suggestion).info("Suggestion created")
             results.append(suggestion)

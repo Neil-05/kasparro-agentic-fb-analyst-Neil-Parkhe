@@ -23,27 +23,53 @@ class Orchestrator:
 
     def run(self, query="Analyze ROAS drop"):
         print("\n--- Running Agentic System ---\n")
-        logger.add("logs/system.json", rotation="1 MB", backtrace=True, diagnose=True, serialize=True)
+
+     
+        logger.add(
+            "logs/system.json",
+            rotation="1 MB",
+            serialize=True,
+            backtrace=True,
+            diagnose=True,
+        )
+
         logger.bind(stage="orchestrator").info("Pipeline started")
         logger.info(f"Starting Agentic Pipeline Run for query: {query}")
+
+     
         logger.info("Memory: loading existing memory (if any)")
         mem_state = self.memory.load()
         logger.info("Memory loaded: {} past runs", len(mem_state.get("runs", [])))
+
+      
         plan = self.planner.plan(query)
         print("Planner Output:", plan)
+
         dataset_path = self.config["data"]["dataset_path"]
         df = self.data_agent.load_data(dataset_path)
+
         summary = self.data_agent.summarize(df)
         print("Data Summary:", summary)
 
         hypotheses = self.insight_agent.generate_hypotheses(summary)
         print("Hypotheses:", hypotheses)
-
+       
         validated = self.evaluator.evaluate(df, hypotheses)
         print("Validated Insights:", validated)
 
         creatives = self.creative_agent.generate_creatives(df)
         print("Creative Suggestions:", creatives)
+
+        scored_output = [
+            {
+                **c,
+                "score": self.creative_agent.scorer.score(c["old_message"])["score"],
+            }
+            for c in creatives
+        ]
+
+        creatives = scored_output  
+
         logger.info("Memory: updating memory with this run's insights")
         try:
             self.memory.update_from_run(summary, validated)
@@ -66,3 +92,21 @@ class Orchestrator:
             f.write(json.dumps(creatives, indent=2))
 
         print("\nOutputs saved to reports/ directory\n")
+
+
+if __name__ == "__main__":
+    import argparse
+    import os
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", type=str, default=None)
+    args = parser.parse_args()
+
+    config_path = (
+        args.config
+        or os.environ.get("DATA_CONFIG")
+        or "config/config.yaml"
+    )
+
+    orchestrator = Orchestrator(config_path=config_path)
+    orchestrator.run("Analyze ROAS drop")
