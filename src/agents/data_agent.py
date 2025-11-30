@@ -4,7 +4,6 @@ from loguru import logger
 
 REQUIRED_COLUMNS = ["date", "country", "spend", "ctr", "roas", "campaign", "message"]
 
-# Mapping for alternate dataset schemas
 COLUMN_MAP = {
     "campaign_name": "campaign",
     "creative_message": "message",
@@ -20,20 +19,13 @@ class DataAgent:
         for attempt in range(1, retries + 1):
             try:
                 df = pd.read_csv(path)
-
-                # Empty check
                 if df.empty:
                     raise ValueError("Dataset is empty")
-
-                # 🔄 NEW: Automatically normalize known alternate column names
                 df = df.rename(columns=COLUMN_MAP)
-
-                # Required schema check
                 missing_cols = [c for c in REQUIRED_COLUMNS if c not in df.columns]
                 if missing_cols:
                     raise KeyError(f"Missing required columns: {missing_cols}")
-
-                # Convert numeric fields and validate
+                
                 for col in ["spend", "ctr", "roas"]:
                     df[col] = pd.to_numeric(df[col], errors="raise")
 
