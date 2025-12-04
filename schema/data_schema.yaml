@@ -1,0 +1,17 @@
+required_columns:
+  - date
+  - country
+  - spend
+  - ctr
+  - roas
+  - campaign
+  - message
+
+types:
+  date: str
+  country: str
+  spend: float
+  ctr: float
+  roas: float
+  campaign: str
+  message: str

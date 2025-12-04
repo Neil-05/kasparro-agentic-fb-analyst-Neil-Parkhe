@@ -1,64 +1,88 @@
-import json
 from pathlib import Path
+import json
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any, Dict, List
 from loguru import logger
 
-DEFAULT_PATH = "memory/short_term_memory.json"
+MEMORY_DIR = Path("memory")
+MEMORY_FILE = MEMORY_DIR / "short_term_memory.json"
+RUNS_FILE = MEMORY_DIR / "runs_history.json"
 
 
 class MemoryAgent:
-    def __init__(self, path: str = DEFAULT_PATH):
-        self.path = Path(path)
-        self.state: Dict[str, Any] = {"runs": [], "campaign_stats": {}, "last_run": None}
-        self._ensure_file()
+    def __init__(self, path: str = None):
+        MEMORY_DIR.mkdir(exist_ok=True)
 
-    def _ensure_file(self):
-        self.path.parent.mkdir(parents=True, exist_ok=True)
+        self.path = Path(path) if path else MEMORY_FILE
+
         if not self.path.exists():
-            logger.info("MemoryAgent: creating memory file at {}", self.path)
-            self.save()
+            self.path.write_text(json.dumps({
+                "runs": [],
+                "failures": [],
+                "campaign_stats": {},
+                "last_run": None
+            }, indent=2))
+
+        if not RUNS_FILE.exists():
+            RUNS_FILE.write_text(json.dumps({"runs": []}, indent=2))
+
 
     def load(self) -> Dict[str, Any]:
         try:
-            with open(self.path, "r") as f:
-                self.state = json.load(f)
-            logger.info("MemoryAgent: loaded memory from {}", self.path)
+            return json.loads(self.path.read_text())
         except Exception as e:
-            logger.warning("MemoryAgent: failed to load memory (will use empty). Error: {}", e)
-            self.state = {"runs": [], "campaign_stats": {}, "last_run": None}
-        return self.state
+            logger.error("MemoryAgent.load failed: {}", e)
+            return {"runs": [], "failures": [], "campaign_stats": {}, "last_run": None}
 
-    def save(self) -> None:
-        try:
-            with open(self.path, "w") as f:
-                json.dump(self.state, f, indent=2, default=str)
-            logger.info("MemoryAgent: saved memory to {}", self.path)
-        except Exception as e:
-            logger.error("MemoryAgent: failed to save memory: {}", e)
+    def save(self, state: Dict[str, Any]):
+        self.path.write_text(json.dumps(state, indent=2))
 
-    def update_from_run(self, summary: Dict[str, Any], validated_insights: list) -> None:
+    def record_failure(self, message: str):
+        state = self.load()
+        state.setdefault("failures", []).append({
+            "time": datetime.utcnow().isoformat(),
+            "message": message
+        })
+        self.save(state)
+
+    def update_from_run(self, summary: Dict[str, Any], insights: List[Dict[str, Any]]):
+        state = self.load()
+
         run_entry = {
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.utcnow().isoformat(),
             "summary": summary,
-            "insights": validated_insights,
+            "insights": insights
         }
-        self.state.setdefault("runs", []).append(run_entry)
-        self.state["last_run"] = run_entry
 
-        # Update campaign-level stats: count low-ctr occurrences per campaign
-        # Assumes 'validated_insights' contains entries like {"issue":"Low CTR", "valid": True, ...}
-        for insight in validated_insights:
-            if insight.get("issue") == "Low CTR" and insight.get("valid"):
-                # If summary contains top campaigns or if insight references campaign, increment
-                # We'll increment an overall counter for now
-                self.state.setdefault("campaign_stats", {}).setdefault("low_ctr_count", 0)
-                self.state["campaign_stats"]["low_ctr_count"] += 1
+        state.setdefault("runs", []).append(run_entry)
+        state["last_run"] = run_entry
 
-        # Limit memory size (keep last N runs)
-        max_runs = 20
-        if len(self.state["runs"]) > max_runs:
-            self.state["runs"] = self.state["runs"][-max_runs:]
+        for x in insights:
+            if x.get("issue") == "Low CTR" and x.get("valid", False):
+                stats = state.setdefault("campaign_stats", {})
+                stats["low_ctr_count"] = stats.get("low_ctr_count", 0) + 1
 
-        logger.info("MemoryAgent: updated memory (runs: {})", len(self.state["runs"]))
-        self.save()
+        if len(state["runs"]) > 20:
+            state["runs"] = state["runs"][-20:]
+
+        self.save(state)
+
+        self.append_run(run_entry)
+
+    def load_runs(self):
+        try:
+            return json.loads(RUNS_FILE.read_text()).get("runs", [])
+        except Exception as e:
+            logger.error("MemoryAgent.load_runs failed: {}", e)
+            return []
+
+    def append_run(self, run_summary: dict):
+        runs = self.load_runs()
+        runs.append(run_summary)
+        RUNS_FILE.write_text(json.dumps({"runs": runs}, indent=2))
+
+    def prune_runs(self, max_runs=100):
+        runs = self.load_runs()
+        if len(runs) > max_runs:
+            runs = runs[-max_runs:]
+            RUNS_FILE.write_text(json.dumps({"runs": runs}, indent=2))

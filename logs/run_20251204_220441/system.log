@@ -1,0 +1,59 @@
+2025-12-04 22:04:41.137 | INFO     | src.agents.evaluator_agent:evaluate:48 - Evaluator (advanced): running quantitative evaluation with deltas
+2025-12-04 22:04:41.138 | INFO     | src.agents.evaluator_agent:evaluate:109 - Evaluator result: {'hypothesis': 'CTR Drop Detected', 'evidence': {'ctr_delta_pct': -25.0, 'worst_segment': 'US', 'segment_ctr': 0.01}, 'impact': 'medium', 'confidence': 0.75}
+2025-12-04 22:04:41.142 | INFO     | src.agents.creative_agent:generate_creatives:9 - Generating creative suggestions tied to insights
+2025-12-04 22:04:41.143 | INFO     | src.agents.creative_agent:generate_creatives:16 - CreativeAgent: Input summary
+2025-12-04 22:04:41.144 | DEBUG    | src.agents.creative_agent:generate_creatives:30 - Evaluating row for creative generation
+2025-12-04 22:04:41.144 | DEBUG    | src.agents.creative_agent:generate_creatives:48 - Creative score computed
+2025-12-04 22:04:41.144 | INFO     | src.agents.creative_agent:generate_creatives:52 - Suggestion created
+2025-12-04 22:04:41.144 | INFO     | src.agents.creative_agent:generate_creatives:56 - CreativeAgent: Output summary
+2025-12-04 22:04:41.148 | INFO     | src.agents.data_agent:load_data:31 - Loading data
+2025-12-04 22:04:41.149 | WARNING  | src.agents.data_agent:load_data:64 - Load failed — retrying
+2025-12-04 22:04:42.154 | ERROR    | src.agents.data_agent:load_data:67 - Failed after retries
+2025-12-04 22:04:42.163 | INFO     | src.agents.data_agent:load_data:31 - Loading data
+2025-12-04 22:04:42.163 | WARNING  | src.agents.data_agent:load_data:64 - Load failed — retrying
+2025-12-04 22:04:43.169 | ERROR    | src.agents.data_agent:load_data:67 - Failed after retries
+2025-12-04 22:04:43.176 | INFO     | src.agents.data_agent:load_data:31 - Loading data
+2025-12-04 22:04:43.181 | WARNING  | src.agents.data_agent:load_data:64 - Load failed — retrying
+2025-12-04 22:04:44.186 | ERROR    | src.agents.data_agent:load_data:67 - Failed after retries
+2025-12-04 22:04:44.192 | INFO     | src.agents.data_agent:load_data:31 - Loading data
+2025-12-04 22:04:44.193 | WARNING  | src.agents.data_agent:load_data:64 - Load failed — retrying
+2025-12-04 22:04:44.193 | WARNING  | src.agents.data_agent:load_data:64 - Load failed — retrying
+2025-12-04 22:04:44.193 | ERROR    | src.agents.data_agent:load_data:67 - Failed after retries
+2025-12-04 22:04:44.195 | INFO     | src.agents.data_agent:load_data:31 - Loading data
+2025-12-04 22:04:44.196 | WARNING  | src.agents.data_agent:load_data:64 - Load failed — retrying
+2025-12-04 22:04:44.196 | WARNING  | src.agents.data_agent:load_data:64 - Load failed — retrying
+2025-12-04 22:04:44.196 | ERROR    | src.agents.data_agent:load_data:67 - Failed after retries
+2025-12-04 22:04:44.197 | INFO     | src.agents.evaluator_agent:evaluate:21 - Evaluator (legacy): running threshold-based validation
+2025-12-04 22:04:44.198 | INFO     | src.agents.insight_agent:generate_hypotheses:7 - Generating insights
+2025-12-04 22:04:44.199 | INFO     | src.agents.insight_agent:generate_hypotheses:32 - Received performance deltas and segment CTR
+2025-12-04 22:04:44.199 | INFO     | src.agents.insight_agent:generate_hypotheses:78 - No drift detected; returning fallback hypothesis
+2025-12-04 22:04:44.199 | INFO     | src.agents.insight_agent:generate_hypotheses:7 - Generating insights
+2025-12-04 22:04:44.200 | WARNING  | src.agents.insight_agent:generate_hypotheses:16 - Fallback triggered: summary missing or invalid
+2025-12-04 22:04:44.200 | INFO     | src.agents.insight_agent:generate_hypotheses:7 - Generating insights
+2025-12-04 22:04:44.200 | INFO     | src.agents.insight_agent:generate_hypotheses:32 - Received performance deltas and segment CTR
+2025-12-04 22:04:44.201 | INFO     | src.agents.insight_agent:generate_hypotheses:78 - No drift detected; returning fallback hypothesis
+2025-12-04 22:04:44.201 | INFO     | src.agents.insight_agent:generate_hypotheses:7 - Generating insights
+2025-12-04 22:04:44.201 | WARNING  | src.agents.insight_agent:generate_hypotheses:16 - Fallback triggered: summary missing or invalid
+2025-12-04 22:04:44.202 | INFO     | src.agents.insight_agent:generate_hypotheses:7 - Generating insights
+2025-12-04 22:04:44.202 | INFO     | src.agents.insight_agent:generate_hypotheses:32 - Received performance deltas and segment CTR
+2025-12-04 22:04:44.202 | INFO     | src.agents.insight_agent:generate_hypotheses:78 - No drift detected; returning fallback hypothesis
+2025-12-04 22:04:44.203 | INFO     | src.agents.insight_agent:generate_hypotheses:7 - Generating insights
+2025-12-04 22:04:44.203 | INFO     | src.agents.insight_agent:generate_hypotheses:32 - Received performance deltas and segment CTR
+2025-12-04 22:04:44.204 | INFO     | src.agents.insight_agent:generate_hypotheses:78 - No drift detected; returning fallback hypothesis
+2025-12-04 22:04:44.206 | INFO     | src.agents.memory_agent:_ensure_file:19 - MemoryAgent: creating memory file at /private/var/folders/sl/2k2rfygd1mb46r8ftf967d580000gn/T/pytest-of-neil/pytest-7/test_memory_create_tmp_file0/mem.json
+2025-12-04 22:04:44.206 | INFO     | src.agents.memory_agent:save:36 - MemoryAgent: saved memory to /private/var/folders/sl/2k2rfygd1mb46r8ftf967d580000gn/T/pytest-of-neil/pytest-7/test_memory_create_tmp_file0/mem.json
+2025-12-04 22:04:44.207 | INFO     | src.agents.memory_agent:load:26 - MemoryAgent: loaded memory from /private/var/folders/sl/2k2rfygd1mb46r8ftf967d580000gn/T/pytest-of-neil/pytest-7/test_memory_create_tmp_file0/mem.json
+2025-12-04 22:04:44.208 | INFO     | src.agents.memory_agent:_ensure_file:19 - MemoryAgent: creating memory file at /private/var/folders/sl/2k2rfygd1mb46r8ftf967d580000gn/T/pytest-of-neil/pytest-7/test_memory_update_and_persist0/mem.json
+2025-12-04 22:04:44.208 | INFO     | src.agents.memory_agent:save:36 - MemoryAgent: saved memory to /private/var/folders/sl/2k2rfygd1mb46r8ftf967d580000gn/T/pytest-of-neil/pytest-7/test_memory_update_and_persist0/mem.json
+2025-12-04 22:04:44.209 | INFO     | src.agents.memory_agent:load:26 - MemoryAgent: loaded memory from /private/var/folders/sl/2k2rfygd1mb46r8ftf967d580000gn/T/pytest-of-neil/pytest-7/test_memory_update_and_persist0/mem.json
+2025-12-04 22:04:44.209 | INFO     | src.agents.memory_agent:update_from_run:61 - MemoryAgent: updated memory (runs: 1)
+2025-12-04 22:04:44.210 | INFO     | src.agents.memory_agent:save:36 - MemoryAgent: saved memory to /private/var/folders/sl/2k2rfygd1mb46r8ftf967d580000gn/T/pytest-of-neil/pytest-7/test_memory_update_and_persist0/mem.json
+2025-12-04 22:04:44.210 | INFO     | src.agents.memory_agent:load:26 - MemoryAgent: loaded memory from /private/var/folders/sl/2k2rfygd1mb46r8ftf967d580000gn/T/pytest-of-neil/pytest-7/test_memory_update_and_persist0/mem.json
+2025-12-04 22:04:44.211 | INFO     | src.agents.planner_agent:plan:5 - Planning query
+2025-12-04 22:04:44.211 | INFO     | src.agents.planner_agent:plan:17 - Planning completed
+2025-12-04 22:04:44.213 | INFO     | src.agents.data_agent:load_data:31 - Loading data
+2025-12-04 22:04:44.214 | WARNING  | src.agents.data_agent:load_data:64 - Load failed — retrying
+2025-12-04 22:04:45.220 | ERROR    | src.agents.data_agent:load_data:67 - Failed after retries
+2025-12-04 22:04:45.226 | INFO     | src.agents.data_agent:load_data:31 - Loading data
+2025-12-04 22:04:45.229 | WARNING  | src.agents.data_agent:load_data:64 - Load failed — retrying
+2025-12-04 22:04:46.234 | ERROR    | src.agents.data_agent:load_data:67 - Failed after retries

@@ -1,0 +1,40 @@
+{
+  "runs": [
+    {
+      "timestamp": "2025-12-04T18:05:08.473089Z",
+      "summary": {
+        "date_range": [
+          "2025-01-01",
+          "2025-01-02"
+        ],
+        "avg_ctr": 0.01
+      },
+      "insights": [
+        {
+          "issue": "Low CTR",
+          "value": 0.01,
+          "threshold": 0.015,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-12-04T18:17:56.650559",
+      "summary": {
+        "date_range": [
+          "2025-01-01",
+          "2025-01-02"
+        ],
+        "avg_ctr": 0.01
+      },
+      "insights": [
+        {
+          "issue": "Low CTR",
+          "value": 0.01,
+          "threshold": 0.015,
+          "valid": true
+        }
+      ]
+    }
+  ]
+}

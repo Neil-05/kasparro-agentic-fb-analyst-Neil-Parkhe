@@ -47,7 +47,6 @@ data/synthetic_fb_ads_undergarments.csv
 ```
 data/sample_small.csv
 ```
-
 ### Data documentation
 
 Required columns (validated by schema):
@@ -94,15 +93,24 @@ thresholds:
 python3 src/orchestrator/run.py --config config/sample_small.yaml
 ```
 
+### MAKEFILE
+
+make setup    # install dependencies
+make run      # run full agentic system
+make test     # run test suite
+make clean    # clear logs + reports
+
 ---
 
 ## Repo Map
 
-```
+'''
 project/
 ├── config/
 │   ├── config.yaml
 │   └── sample_small.yaml
+├── schema/
+│   └── data_schema.yaml
 ├── data/
 │   ├── synthetic_fb_ads_undergarments.csv
 │   └── sample_small.csv
@@ -120,7 +128,9 @@ project/
 │   │   ├── data_agent.py
 │   │   ├── insight_agent.py
 │   │   ├── evaluator_agent.py
-│   │   └── creative_agent.py
+│   │   ├── creative_agent.py
+│   │   ├── creative_score_agent.py
+│   │   └── memory_agent.py
 │   ├── orchestrator/
 │   │   └── run.py
 ├── tests/
@@ -137,7 +147,7 @@ project/
 ├── Makefile
 ├── requirements.txt
 └── README.md
-```
+'''
 
 ---
 
@@ -175,17 +185,31 @@ logs/system.json
 Structured logs include:
 
 * agent name
-* stage
-* retries
-* errors
-* dataset path
-* success/failure markers
+* input snapshot
+* output summary
+* reasoning steps (“why this hypothesis was created”)
+* retries & failures
+* execution time
+* final outputs
 
 Stored at:
 
 ```
 logs/system.json
 ```
+
+---
+
+## Developer-Focused Features
+
+- **Fully config-driven architecture** — No hardcoded thresholds, file paths, or agent parameters.  
+- **Schema validation layer** — Ensures safe, predictable data ingestion before processing.  
+- **Column normalization** — Harmonizes input dataset column names for maximum compatibility.  
+- **Per-agent structured logging** — Every agent logs actions in standardized JSON format.  
+- **Retry system with failure logging** — Automatic retries on recoverable errors with detailed logs.  
+- **Segmented performance analysis** — Breaks down performance by dimensions (campaign, ad group, creative, etc.).  
+- **Clear fallback behaviors** — Example: generate `"Unknown"` hypotheses when data is insufficient.  
+- **Automatic reports & logs** — Every run produces a summarized report plus detailed logs for debugging.  
 
 ---
 
@@ -223,21 +247,26 @@ Exception: DataAgent: Failed to load CSV after retries
 
 ---
 
-## P1 Enhancements
+## Agent Responsibilities
 
-* Dynamic config switching (`--config` flag)
-* Automatic schema validation
-* Column normalization layer
-* Sample dataset included
-* Documentation of failure modes
-* Test coverage for retry logic, schema validation, and alternate configs
-
-## P2 Enchancements
-
-* Memory for short runs
-* Basic quality scoring agent
+| **Agent**             | **Responsibility** |
+|----------------------|--------------------|
+| **PlannerAgent**     | Converts natural-language queries into a structured execution plan. |
+| **DataAgent**        | Validates dataset columns/types, computes drift metrics, and retries on failure. |
+| **InsightAgent**     | Generates CTR/ROAS hypotheses using quantified performance deltas. |
+| **EvaluatorAgent**   | Assigns impact levels + confidence scores after validating hypotheses. |
+| **CreativeScoreAgent** | Scores message/creative quality on a 0–100 scale. |
+| **CreativeAgent**    | Rewrites creatives and ties improvements directly to identified issues. |
+| **MemoryAgent**      | Writes full run history, failures, retries, and timestamps for observability. |
 
 ---
+
+## Developer Notes
+
+* Codebase is modular and agent-isolated.
+* Extending the pipeline requires editing a single agent without breaking others.
+* Dataset switching is fully config-based.
+* Failures are surfaced cleanly with contextual logs—no silent errors.
 
 ## Release
 
@@ -247,26 +276,3 @@ v2.0.0
 
 ---
 
-## Self-Review Checklist
-
-* [x] Correct repo name format
-* [x] README includes quick start + commands
-* [x] Config system implemented
-* [x] All agents implemented
-* [x] Prompts stored in `/prompts`
-* [x] Reports generated
-* [x] JSON logs included
-* [x] Unit tests for all agents
-* [x] Schema validation
-* [x] Retry logic
-* [x] Makefile
-* [x] Release tag
-* [x] PR with self-review
-* [x] Dynamic config switching
-* [x] Sample dataset included
-* [x] Memory for short runs
-* [x] Basic quality scoring logic
-
----
-
-# End of README
