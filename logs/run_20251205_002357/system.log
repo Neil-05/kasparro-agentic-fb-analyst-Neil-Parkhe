@@ -1,0 +1,35 @@
+2025-12-05 00:23:57.980 | INFO     | __main__:run:42 - Pipeline started
+2025-12-05 00:23:57.980 | INFO     | src.agents.planner_agent:plan:5 - Planning query
+2025-12-05 00:23:57.980 | INFO     | src.agents.planner_agent:plan:17 - Planning completed
+2025-12-05 00:23:57.980 | INFO     | __main__:run:46 - Planner completed
+2025-12-05 00:23:57.980 | INFO     | src.agents.data_agent:load_data:31 - Loading data
+2025-12-05 00:23:57.995 | INFO     | src.agents.data_agent:load_data:59 - Data loaded
+2025-12-05 00:23:57.995 | INFO     | __main__:run:50 - Data loading completed
+2025-12-05 00:23:57.996 | INFO     | src.agents.data_agent:compute_deltas:143 - Computing baseline vs current performance
+2025-12-05 00:23:57.998 | WARNING  | src.agents.schema_drift:detect_schema_drift:18 - Schema drift detected: missing=%s new=%s
+2025-12-05 00:23:57.998 | WARNING  | __main__:run:65 - Schema drift detected
+2025-12-05 00:23:57.999 | INFO     | src.agents.insight_agent:generate_hypotheses:7 - Generating insights
+2025-12-05 00:23:57.999 | INFO     | src.agents.insight_agent:generate_hypotheses:31 - Received performance deltas and segment CTR
+2025-12-05 00:23:57.999 | INFO     | src.agents.insight_agent:generate_hypotheses:44 - Evaluating CTR drift
+2025-12-05 00:23:57.999 | INFO     | src.agents.insight_agent:generate_hypotheses:65 - Evaluating ROAS drift
+2025-12-05 00:23:57.999 | INFO     | src.agents.insight_agent:generate_hypotheses:82 - Finished generating hypotheses
+2025-12-05 00:23:57.999 | INFO     | __main__:run:69 - Insight generation completed
+2025-12-05 00:23:57.999 | INFO     | src.agents.evaluator_agent:evaluate:48 - Evaluator (advanced): running quantitative evaluation with deltas
+2025-12-05 00:23:57.999 | INFO     | src.agents.evaluator_agent:evaluate:109 - Evaluator result: {'hypothesis': 'CTR Drop Detected', 'evidence': {'ctr_delta_pct': 0.0, 'worst_segment': None, 'segment_ctr': None}, 'impact': 'low', 'confidence': 0.5}
+2025-12-05 00:23:57.999 | INFO     | src.agents.evaluator_agent:evaluate:109 - Evaluator result: {'hypothesis': 'ROAS Decline', 'evidence': {'roas_delta_pct': 0.0}, 'impact': 'low', 'confidence': 0.4}
+2025-12-05 00:23:58.000 | INFO     | __main__:run:85 - Evaluation completed
+2025-12-05 00:23:58.000 | INFO     | src.agents.creative_agent:generate_creatives:10 - Generating creative suggestions tied to insights
+2025-12-05 00:23:58.001 | INFO     | src.agents.creative_agent:generate_creatives:16 - CreativeAgent: Input summary
+2025-12-05 00:23:58.001 | DEBUG    | src.agents.creative_agent:generate_creatives:41 - Evaluating row for creative generation
+2025-12-05 00:23:58.002 | INFO     | src.agents.creative_agent:generate_creatives:56 - Suggestion created
+2025-12-05 00:23:58.002 | DEBUG    | src.agents.creative_agent:generate_creatives:41 - Evaluating row for creative generation
+2025-12-05 00:23:58.002 | INFO     | src.agents.creative_agent:generate_creatives:56 - Suggestion created
+2025-12-05 00:23:58.002 | DEBUG    | src.agents.creative_agent:generate_creatives:41 - Evaluating row for creative generation
+2025-12-05 00:23:58.002 | INFO     | src.agents.creative_agent:generate_creatives:56 - Suggestion created
+2025-12-05 00:23:58.002 | DEBUG    | src.agents.creative_agent:generate_creatives:41 - Evaluating row for creative generation
+2025-12-05 00:23:58.003 | INFO     | src.agents.creative_agent:generate_creatives:56 - Suggestion created
+2025-12-05 00:23:58.003 | DEBUG    | src.agents.creative_agent:generate_creatives:41 - Evaluating row for creative generation
+2025-12-05 00:23:58.003 | INFO     | src.agents.creative_agent:generate_creatives:56 - Suggestion created
+2025-12-05 00:23:58.003 | INFO     | __main__:run:89 - Creative generation completed
+2025-12-05 00:23:58.004 | INFO     | src.agents.experiment_agent:summarize_run:28 - Run summary created: ['CTR change: -16.24%', 'ROAS change: -10.27%']
+2025-12-05 00:23:58.005 | INFO     | __main__:run:120 - Pipeline summary saved

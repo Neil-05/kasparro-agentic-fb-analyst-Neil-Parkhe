@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "hypothesis": "CTR Drop Detected",
+    "evidence": {
+      "ctr_delta_pct": 0.0,
+      "worst_segment": null,
+      "segment_ctr": null
+    },
+    "impact": "low",
+    "confidence": 0.5
+  },
+  {
+    "hypothesis": "ROAS Decline",
+    "evidence": {
+      "roas_delta_pct": 0.0
+    },
+    "impact": "low",
+    "confidence": 0.4
+  }
+]

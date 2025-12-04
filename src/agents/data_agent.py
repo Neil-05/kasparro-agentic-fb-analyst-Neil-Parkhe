@@ -37,7 +37,6 @@ class DataAgent:
                 if df.empty:
                     raise ValueError("Dataset is empty")
 
-<<<<<<< HEAD
                 df = df.rename(columns=COLUMN_MAP)
 
                 missing_cols = [c for c in self.required_cols if c not in df.columns]
@@ -56,19 +55,6 @@ class DataAgent:
                         df[col] = pd.to_numeric(df[col], errors="raise")
                     elif expected_type == "str":
                         df[col] = df[col].astype(str)
-=======
-                # Normalize column names
-                df = df.rename(columns=COLUMN_MAP)
-
-                # Schema check
-                missing_cols = [c for c in REQUIRED_COLUMNS if c not in df.columns]
-                if missing_cols:
-                    raise KeyError(f"Missing required columns: {missing_cols}")
-
-                # Numeric validation
-                for col in ["spend", "ctr", "roas"]:
-                    df[col] = pd.to_numeric(df[col], errors="raise")
->>>>>>> main
 
                 logger.bind(agent="data", step="load_success", rows=len(df)).info("Data loaded")
                 return df

@@ -35,6 +35,84 @@
           "valid": true
         }
       ]
+    },
+    {
+      "time": "2025-12-04T18:53:58.004771",
+      "baseline": {
+        "ctr": 0.014221021431828546,
+        "roas": 10.174806201550387,
+        "spend": 478.9569949840401
+      },
+      "current": {
+        "ctr": 0.011911987237921605,
+        "roas": 9.129535095715589,
+        "spend": 480.96044211485867
+      },
+      "deltas": {
+        "ctr_delta_pct": -16.236767555521812,
+        "roas_delta_pct": -10.273130368571787,
+        "spend_delta_pct": 0.41829374073247333
+      },
+      "highlights": [
+        "CTR change: -16.24%",
+        "ROAS change: -10.27%"
+      ],
+      "worst_segments": [],
+      "schema_columns": [
+        "campaign",
+        "adset",
+        "date",
+        "spend",
+        "impressions",
+        "clicks",
+        "ctr",
+        "purchases",
+        "revenue",
+        "roas",
+        "creative_type",
+        "message",
+        "audience_type",
+        "platform",
+        "country"
+      ],
+      "validated_insights": [
+        {
+          "hypothesis": "CTR Drop Detected",
+          "evidence": {
+            "ctr_delta_pct": 0.0,
+            "worst_segment": null,
+            "segment_ctr": null
+          },
+          "impact": "low",
+          "confidence": 0.5
+        },
+        {
+          "hypothesis": "ROAS Decline",
+          "evidence": {
+            "roas_delta_pct": 0.0
+          },
+          "impact": "low",
+          "confidence": 0.4
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-12-04T18:54:13.212849",
+      "summary": {
+        "date_range": [
+          "2025-01-01",
+          "2025-01-02"
+        ],
+        "avg_ctr": 0.01
+      },
+      "insights": [
+        {
+          "issue": "Low CTR",
+          "value": 0.01,
+          "threshold": 0.015,
+          "valid": true
+        }
+      ]
     }
   ]
 }
