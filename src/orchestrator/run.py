@@ -1,5 +1,7 @@
 import yaml
 import json
+import argparse
+import os
 from pathlib import Path
 from loguru import logger
 
@@ -8,7 +10,7 @@ from src.agents.data_agent import DataAgent
 from src.agents.insight_agent import InsightAgent
 from src.agents.evaluator_agent import EvaluatorAgent
 from src.agents.creative_agent import CreativeAgent
-from src.agents.memory_agent import MemoryAgent  
+from src.agents.memory_agent import MemoryAgent
 
 
 class Orchestrator:
@@ -19,73 +21,85 @@ class Orchestrator:
         self.insight_agent = InsightAgent()
         self.evaluator = EvaluatorAgent(self.config)
         self.creative_agent = CreativeAgent()
-        self.memory = MemoryAgent()  
+        self.memory = MemoryAgent()
 
     def run(self, query="Analyze ROAS drop"):
         print("\n--- Running Agentic System ---\n")
-
-     
-        logger.add(
-            "logs/system.json",
-            rotation="1 MB",
-            serialize=True,
-            backtrace=True,
-            diagnose=True,
-        )
-
+        logger.add("logs/system.json", rotation="1 MB", backtrace=True, diagnose=True, serialize=True)
         logger.bind(stage="orchestrator").info("Pipeline started")
-        logger.info(f"Starting Agentic Pipeline Run for query: {query}")
-
-     
         logger.info("Memory: loading existing memory (if any)")
         mem_state = self.memory.load()
         logger.info("Memory loaded: {} past runs", len(mem_state.get("runs", [])))
 
-      
-        plan = self.planner.plan(query)
-        print("Planner Output:", plan)
-
-        dataset_path = self.config["data"]["dataset_path"]
-        df = self.data_agent.load_data(dataset_path)
-
-        summary = self.data_agent.summarize(df)
-        print("Data Summary:", summary)
-
-        hypotheses = self.insight_agent.generate_hypotheses(summary)
-        print("Hypotheses:", hypotheses)
-       
-        deltas = self.data_agent.compute_deltas(df)
-        validated = self.evaluator.evaluate(df, hypotheses, deltas)
-
-        print("Validated Insights:", validated)
-
-        creatives = self.creative_agent.generate_creatives(df)
-        print("Creative Suggestions:", creatives)
-
-        scored_output = [
-            {
-                **c,
-                "score": self.creative_agent.scorer.score(c["old_message"])["score"],
-            }
-            for c in creatives
-        ]
-
-        creatives = scored_output  
-
-        logger.info("Memory: updating memory with this run's insights")
         try:
-            self.memory.update_from_run(summary, validated)
+            plan = self.planner.plan(query)
+            logger.bind(stage="planner", output=plan).info("Planner completed")
+            print("Planner Output:", plan)
         except Exception as e:
-            logger.error("Memory update failed: {}", e)
+            logger.error("Planner failed: {}", e)
+            self.memory.record_failure(str(e))
+            raise
 
+        dataset_path = self.config.get("data", {}).get("dataset_path", "data/sample_small.csv")
+        try:
+            logger.bind(stage="data_agent", input=dataset_path).info("Data loading started")
+            df = self.data_agent.load_data(dataset_path)
+            logger.bind(stage="data_agent", output=f"{len(df)} rows").info("Data loading completed")
+        except Exception as e:
+            logger.error("DataAgent failed: {}", e)
+            self.memory.record_failure(str(e))
+            raise
+
+        try:
+            summary = self.data_agent.summarize(df)
+            logger.bind(stage="data_summary", output=summary).info("Summary completed")
+            print("Data Summary:", summary)
+        except Exception as e:
+            logger.error("Summarize failed: {}", e)
+            self.memory.record_failure(str(e))
+            raise
+
+        try:
+            deltas_full = self.data_agent.compute_deltas(df)
+            logger.bind(stage="data_deltas", output=deltas_full).info("Deltas computed")
+        except Exception as e:
+            logger.error("compute_deltas failed: {}", e)
+            deltas_full = {"deltas": {}, "segment_ctr": {}, "worst_segment": "unknown"}
+
+        try:
+            hypotheses = self.insight_agent.generate_hypotheses(deltas_full)
+            logger.bind(stage="insight_agent", output=hypotheses).info("Insight generation completed")
+            print("Hypotheses:", hypotheses)
+        except Exception as e:
+            logger.error("InsightAgent failed: {}", e)
+            hypotheses = [{"issue": "Unknown", "reason": "insight failure", "confidence": 0.0}]
+            self.memory.record_failure(str(e))
+
+        try:
+            validated = self.evaluator.evaluate(df, hypotheses, deltas=deltas_full.get("deltas"))
+            logger.bind(stage="evaluator", output=validated).info("Evaluation completed")
+            print("Validated Insights:", validated)
+        except Exception as e:
+            logger.error("Evaluator failed: {}", e)
+            validated = []
+            self.memory.record_failure(str(e))
+
+        try:
+            creatives = self.creative_agent.generate_creatives(df, hypotheses)
+            # optional scoring: if creative agent added scores, keep them
+            logger.bind(stage="creative_agent", output=f"{len(creatives)} items").info("Creative generation completed")
+            print("Creative Suggestions:", creatives)
+        except Exception as e:
+            logger.error("CreativeAgent failed: {}", e)
+            creatives = []
+            self.memory.record_failure(str(e))
+
+        # persist reports & memory
         Path("reports").mkdir(exist_ok=True)
-
         with open("reports/insights.json", "w") as f:
             json.dump(validated, f, indent=2)
-
         with open("reports/creatives.json", "w") as f:
             json.dump(creatives, f, indent=2)
-
         with open("reports/report.md", "w") as f:
             f.write("# Final Marketing Report\n\n")
             f.write("## Validated Insights\n")
@@ -93,22 +107,19 @@ class Orchestrator:
             f.write("\n\n## Creative Suggestions\n")
             f.write(json.dumps(creatives, indent=2))
 
+        try:
+            self.memory.update_from_run(summary, validated)
+        except Exception as e:
+            logger.warning("Memory update failed: {}", e)
+
+        logger.bind(stage="orchestrator").info("Pipeline finished successfully")
         print("\nOutputs saved to reports/ directory\n")
 
 
 if __name__ == "__main__":
-    import argparse
-    import os
-
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str, default=None)
+    parser.add_argument("--config", type=str, default=None, help="Path to config YAML")
     args = parser.parse_args()
-
-    config_path = (
-        args.config
-        or os.environ.get("DATA_CONFIG")
-        or "config/config.yaml"
-    )
-
+    config_path = args.config or os.environ.get("DATA_CONFIG") or "config/config.yaml"
     orchestrator = Orchestrator(config_path=config_path)
     orchestrator.run("Analyze ROAS drop")

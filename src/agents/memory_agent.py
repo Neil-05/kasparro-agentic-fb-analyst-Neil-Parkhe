@@ -46,16 +46,14 @@ class MemoryAgent:
         self.state.setdefault("runs", []).append(run_entry)
         self.state["last_run"] = run_entry
 
-        # Update campaign-level stats: count low-ctr occurrences per campaign
-        # Assumes 'validated_insights' contains entries like {"issue":"Low CTR", "valid": True, ...}
+       
         for insight in validated_insights:
             if insight.get("issue") == "Low CTR" and insight.get("valid"):
-                # If summary contains top campaigns or if insight references campaign, increment
-                # We'll increment an overall counter for now
+               
                 self.state.setdefault("campaign_stats", {}).setdefault("low_ctr_count", 0)
                 self.state["campaign_stats"]["low_ctr_count"] += 1
 
-        # Limit memory size (keep last N runs)
+     
         max_runs = 20
         if len(self.state["runs"]) > max_runs:
             self.state["runs"] = self.state["runs"][-max_runs:]

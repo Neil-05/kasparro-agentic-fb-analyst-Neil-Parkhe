@@ -1,13 +1,15 @@
+# src/agents/creative_agent.py
+
 from loguru import logger
 from src.agents.creative_score_agent import CreativeScoreAgent
 
 
 class CreativeAgent:
     def __init__(self):
-        self.scorer = CreativeScoreAgent()   # scoring engine added
+        self.scorer = CreativeScoreAgent()  # FIXED — ensure not None
 
-    def generate_creatives(self, df):
-        logger.bind(agent="creative", step="start").info("Generating creative suggestions")
+    def generate_creatives(self, df, hypotheses=None):
+        logger.info("Generating creative suggestions tied to insights")
 
         low_ctr_ads = df[df["ctr"] < 0.015].head(5)
         results = []
@@ -26,12 +28,11 @@ class CreativeAgent:
                 ]
             }
 
-            # FIX: score correct variable
+            # Apply scoring
             scored = self.scorer.score(msg)
             suggestion["score"] = scored["score"]
 
             logger.bind(agent="creative", suggestion=suggestion).info("Suggestion created")
             results.append(suggestion)
 
-        logger.bind(agent="creative", step="end", total=len(results)).info("Creative generation completed")
         return results
