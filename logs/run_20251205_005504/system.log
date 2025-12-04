@@ -1,0 +1,51 @@
+2025-12-05 00:55:04.952 | INFO     | src.agents.evaluator_agent:evaluate:48 - Evaluator (advanced): running quantitative evaluation with deltas
+2025-12-05 00:55:04.952 | INFO     | src.agents.evaluator_agent:evaluate:109 - Evaluator result: {'hypothesis': 'CTR Drop Detected', 'evidence': {'ctr_delta_pct': -25.0, 'worst_segment': 'US', 'segment_ctr': 0.01}, 'impact': 'medium', 'confidence': 0.75}
+2025-12-05 00:55:04.953 | INFO     | src.agents.adaptive_thresholds:compute_percentile_thresholds:18 - Adaptive thresholds computed: {'low_ctr': 0.018000000000000002, 'low_roas': 1.8}
+2025-12-05 00:55:04.957 | INFO     | src.agents.creative_agent:generate_creatives:10 - Generating creative suggestions tied to insights
+2025-12-05 00:55:04.957 | INFO     | src.agents.creative_agent:generate_creatives:16 - CreativeAgent: Input summary
+2025-12-05 00:55:04.958 | DEBUG    | src.agents.creative_agent:generate_creatives:41 - Evaluating row for creative generation
+2025-12-05 00:55:04.958 | INFO     | src.agents.creative_agent:generate_creatives:56 - Suggestion created
+2025-12-05 00:55:04.961 | INFO     | src.agents.data_agent:load_data:31 - Loading data
+2025-12-05 00:55:04.963 | WARNING  | src.agents.data_agent:load_data:64 - Load failed — retrying
+2025-12-05 00:55:05.968 | ERROR    | src.agents.data_agent:load_data:67 - Failed after retries
+2025-12-05 00:55:05.976 | INFO     | src.agents.data_agent:load_data:31 - Loading data
+2025-12-05 00:55:05.976 | WARNING  | src.agents.data_agent:load_data:64 - Load failed — retrying
+2025-12-05 00:55:06.981 | ERROR    | src.agents.data_agent:load_data:67 - Failed after retries
+2025-12-05 00:55:06.989 | INFO     | src.agents.data_agent:load_data:31 - Loading data
+2025-12-05 00:55:06.992 | WARNING  | src.agents.data_agent:load_data:64 - Load failed — retrying
+2025-12-05 00:55:07.998 | ERROR    | src.agents.data_agent:load_data:67 - Failed after retries
+2025-12-05 00:55:08.004 | INFO     | src.agents.data_agent:load_data:31 - Loading data
+2025-12-05 00:55:08.004 | WARNING  | src.agents.data_agent:load_data:64 - Load failed — retrying
+2025-12-05 00:55:08.004 | WARNING  | src.agents.data_agent:load_data:64 - Load failed — retrying
+2025-12-05 00:55:08.005 | ERROR    | src.agents.data_agent:load_data:67 - Failed after retries
+2025-12-05 00:55:08.007 | INFO     | src.agents.data_agent:load_data:31 - Loading data
+2025-12-05 00:55:08.007 | WARNING  | src.agents.data_agent:load_data:64 - Load failed — retrying
+2025-12-05 00:55:08.007 | WARNING  | src.agents.data_agent:load_data:64 - Load failed — retrying
+2025-12-05 00:55:08.008 | ERROR    | src.agents.data_agent:load_data:67 - Failed after retries
+2025-12-05 00:55:08.009 | INFO     | src.agents.evaluator_agent:evaluate:21 - Evaluator (legacy): running threshold-based validation
+2025-12-05 00:55:08.010 | INFO     | src.agents.insight_agent:generate_hypotheses:7 - Generating insights
+2025-12-05 00:55:08.010 | INFO     | src.agents.insight_agent:generate_hypotheses:31 - Received performance deltas and segment CTR
+2025-12-05 00:55:08.011 | INFO     | src.agents.insight_agent:generate_hypotheses:75 - No drift detected; returning fallback hypothesis
+2025-12-05 00:55:08.011 | INFO     | src.agents.insight_agent:generate_hypotheses:7 - Generating insights
+2025-12-05 00:55:08.012 | WARNING  | src.agents.insight_agent:generate_hypotheses:15 - Fallback triggered: summary missing or invalid
+2025-12-05 00:55:08.012 | INFO     | src.agents.insight_agent:generate_hypotheses:7 - Generating insights
+2025-12-05 00:55:08.012 | INFO     | src.agents.insight_agent:generate_hypotheses:31 - Received performance deltas and segment CTR
+2025-12-05 00:55:08.013 | INFO     | src.agents.insight_agent:generate_hypotheses:75 - No drift detected; returning fallback hypothesis
+2025-12-05 00:55:08.013 | INFO     | src.agents.insight_agent:generate_hypotheses:7 - Generating insights
+2025-12-05 00:55:08.013 | WARNING  | src.agents.insight_agent:generate_hypotheses:15 - Fallback triggered: summary missing or invalid
+2025-12-05 00:55:08.014 | INFO     | src.agents.insight_agent:generate_hypotheses:7 - Generating insights
+2025-12-05 00:55:08.014 | INFO     | src.agents.insight_agent:generate_hypotheses:31 - Received performance deltas and segment CTR
+2025-12-05 00:55:08.014 | INFO     | src.agents.insight_agent:generate_hypotheses:75 - No drift detected; returning fallback hypothesis
+2025-12-05 00:55:08.015 | INFO     | src.agents.insight_agent:generate_hypotheses:7 - Generating insights
+2025-12-05 00:55:08.015 | INFO     | src.agents.insight_agent:generate_hypotheses:31 - Received performance deltas and segment CTR
+2025-12-05 00:55:08.015 | INFO     | src.agents.insight_agent:generate_hypotheses:75 - No drift detected; returning fallback hypothesis
+2025-12-05 00:55:08.022 | INFO     | src.agents.planner_agent:plan:5 - Planning query
+2025-12-05 00:55:08.023 | INFO     | src.agents.planner_agent:plan:17 - Planning completed
+2025-12-05 00:55:08.025 | WARNING  | src.agents.schema_drift:detect_schema_drift:18 - Schema drift detected: missing=%s new=%s
+2025-12-05 00:55:08.026 | WARNING  | src.agents.schema_drift:detect_schema_drift:18 - Schema drift detected: missing=%s new=%s
+2025-12-05 00:55:08.028 | INFO     | src.agents.data_agent:load_data:31 - Loading data
+2025-12-05 00:55:08.030 | WARNING  | src.agents.data_agent:load_data:64 - Load failed — retrying
+2025-12-05 00:55:09.035 | ERROR    | src.agents.data_agent:load_data:67 - Failed after retries
+2025-12-05 00:55:09.042 | INFO     | src.agents.data_agent:load_data:31 - Loading data
+2025-12-05 00:55:09.046 | WARNING  | src.agents.data_agent:load_data:64 - Load failed — retrying
+2025-12-05 00:55:10.051 | ERROR    | src.agents.data_agent:load_data:67 - Failed after retries

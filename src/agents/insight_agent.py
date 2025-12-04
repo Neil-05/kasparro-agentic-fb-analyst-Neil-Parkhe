@@ -86,3 +86,8 @@ class InsightAgent:
         return hypotheses
 
 
+<<<<<<< HEAD
+=======
+
+      
+>>>>>>> 66abb0746e3c5ab8825199fab0890ab3439cd331
