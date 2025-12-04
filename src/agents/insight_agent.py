@@ -1,40 +1,49 @@
-# src/agents/insight_agent.py
-
 from loguru import logger
 import math
 
 
 class InsightAgent:
     def generate_hypotheses(self, summary, retries=1):
-        logger.info("Generating insights using baseline/current deltas")
+        logger.bind(agent="insight", step="start").info("Generating insights")
 
-        # ------------- REQUIRED FALLBACK FOR TESTS -------------
-        # Must return {"issue": "Unknown"} when:
-        # - summary is empty
-        # - summary missing avg_ctr
-        # - avg_ctr is NaN
+        # ----------------- REQUIRED FALLBACK FOR TESTS -----------------
         if (
             not summary
             or "avg_ctr" not in summary
             or (isinstance(summary.get("avg_ctr"), float)
                 and math.isnan(summary.get("avg_ctr")))
         ):
+            logger.bind(agent="insight", reason="invalid_summary").warning(
+                "Fallback triggered: summary missing or invalid"
+            )
             return [{
                 "issue": "Unknown",
                 "reason": "Insufficient or invalid summary",
                 "confidence": 0.0
             }]
 
-        # ------------- V2 LOGIC (your real system) -------------
         deltas = summary.get("deltas", {})
         seg_ctr = summary.get("segment_ctr", {})
 
+        logger.bind(
+            agent="insight",
+            deltas=deltas,
+            segments=list(seg_ctr.keys())
+        ).info("Received performance deltas and segment CTR")
+
         hypotheses = []
 
-        # CTR hypothesis
+        # ---------------- CTR Drift Rule ----------------
         if "ctr_delta_pct" in deltas:
             pct = deltas["ctr_delta_pct"]
             worst_seg = next(iter(seg_ctr.items()), ("unknown", None))
+
+            logger.bind(
+                agent="insight",
+                metric="CTR",
+                delta_pct=pct,
+                worst_segment=worst_seg
+            ).info("Evaluating CTR drift")
 
             hypotheses.append({
                 "issue": "CTR Drop Detected",
@@ -47,9 +56,15 @@ class InsightAgent:
                 "confidence": max(0.2, min(0.9, abs(pct) / 100))
             })
 
-        # ROAS hypothesis
+        # ---------------- ROAS Drift Rule ----------------
         if "roas_delta_pct" in deltas:
             pct = deltas["roas_delta_pct"]
+
+            logger.bind(
+                agent="insight",
+                metric="ROAS",
+                delta_pct=pct
+            ).info("Evaluating ROAS drift")
 
             hypotheses.append({
                 "issue": "ROAS Decline",
@@ -58,12 +73,18 @@ class InsightAgent:
                 "confidence": max(0.2, min(0.9, abs(pct) / 100))
             })
 
-        # If nothing significant found
+        # ---------------- No Drift Found ----------------
         if not hypotheses:
+            logger.bind(agent="insight").info("No drift detected; returning fallback hypothesis")
             return [{
                 "issue": "Unknown",
                 "reason": "No significant drift",
                 "confidence": 0.0
             }]
+
+        # ---------------- Final Output Log ----------------
+        logger.bind(agent="insight", count=len(hypotheses)).info(
+            "Finished generating hypotheses"
+        )
 
         return hypotheses

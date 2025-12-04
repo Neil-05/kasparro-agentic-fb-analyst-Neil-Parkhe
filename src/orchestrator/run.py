@@ -2,9 +2,10 @@ import yaml
 import json
 import argparse
 import os
+import time
+from datetime import datetime
 from pathlib import Path
 from loguru import logger
-
 from src.agents.planner_agent import PlannerAgent
 from src.agents.data_agent import DataAgent
 from src.agents.insight_agent import InsightAgent
@@ -12,6 +13,13 @@ from src.agents.evaluator_agent import EvaluatorAgent
 from src.agents.creative_agent import CreativeAgent
 from src.agents.memory_agent import MemoryAgent
 
+
+run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+log_dir = Path(f"logs/run_{run_id}")
+log_dir.mkdir(parents=True, exist_ok=True)
+
+logger.add(log_dir / "system.json", serialize=True, rotation="1 MB")
+logger.add(log_dir / "system.log", rotation="1 MB")
 
 class Orchestrator:
     def __init__(self, config_path="config/config.yaml"):
