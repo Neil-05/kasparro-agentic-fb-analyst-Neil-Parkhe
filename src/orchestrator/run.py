@@ -54,7 +54,9 @@ class Orchestrator:
         hypotheses = self.insight_agent.generate_hypotheses(summary)
         print("Hypotheses:", hypotheses)
        
-        validated = self.evaluator.evaluate(df, hypotheses)
+        deltas = self.data_agent.compute_deltas(df)
+        validated = self.evaluator.evaluate(df, hypotheses, deltas)
+
         print("Validated Insights:", validated)
 
         creatives = self.creative_agent.generate_creatives(df)
