@@ -6,7 +6,6 @@ class InsightAgent:
     def generate_hypotheses(self, summary, retries=1):
         logger.bind(agent="insight", step="start").info("Generating insights")
 
-        # ----------------- REQUIRED FALLBACK FOR TESTS -----------------
         if (
             not summary
             or "avg_ctr" not in summary
@@ -33,7 +32,6 @@ class InsightAgent:
 
         hypotheses = []
 
-        # ---------------- CTR Drift Rule ----------------
         if "ctr_delta_pct" in deltas:
             pct = deltas["ctr_delta_pct"]
             worst_seg = next(iter(seg_ctr.items()), ("unknown", None))
@@ -56,7 +54,7 @@ class InsightAgent:
                 "confidence": max(0.2, min(0.9, abs(pct) / 100))
             })
 
-        # ---------------- ROAS Drift Rule ----------------
+     
         if "roas_delta_pct" in deltas:
             pct = deltas["roas_delta_pct"]
 
@@ -73,7 +71,6 @@ class InsightAgent:
                 "confidence": max(0.2, min(0.9, abs(pct) / 100))
             })
 
-        # ---------------- No Drift Found ----------------
         if not hypotheses:
             logger.bind(agent="insight").info("No drift detected; returning fallback hypothesis")
             return [{
@@ -82,9 +79,12 @@ class InsightAgent:
                 "confidence": 0.0
             }]
 
-        # ---------------- Final Output Log ----------------
         logger.bind(agent="insight", count=len(hypotheses)).info(
             "Finished generating hypotheses"
         )
 
         return hypotheses
+
+
+
+      

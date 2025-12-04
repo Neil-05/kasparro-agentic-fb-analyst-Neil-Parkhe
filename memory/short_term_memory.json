@@ -24,13 +24,81 @@
           "valid": true
         }
       ]
+    },
+    {
+      "timestamp": "2025-11-30T18:34:01.776514Z",
+      "summary": {
+        "date_range": [
+          "2025-01-01",
+          "2025-03-31"
+        ],
+        "total_spend": 2105579.9,
+        "avg_ctr": 0.013065511111111112,
+        "avg_roas": 9.634399910932975,
+        "top_countries": {
+          "US": 2465,
+          "IN": 1149,
+          "UK": 886
+        }
+      },
+      "insights": [
+        {
+          "issue": "Low CTR",
+          "value": 0.013065511111111112,
+          "threshold": 0.015,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-11-30T18:34:16.818648Z",
+      "summary": {
+        "date_range": [
+          "2025-01-01",
+          "2025-03-31"
+        ],
+        "total_spend": 2105579.9,
+        "avg_ctr": 0.013065511111111112,
+        "avg_roas": 9.634399910932975,
+        "top_countries": {
+          "US": 2465,
+          "IN": 1149,
+          "UK": 886
+        }
+      },
+      "insights": [
+        {
+          "issue": "Low CTR",
+          "value": 0.013065511111111112,
+          "threshold": 0.015,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-12-01T21:12:15.047687Z",
+      "summary": {
+        "date_range": [
+          "2025-01-01",
+          "2025-03-31"
+        ],
+        "total_spend": 2105579.9,
+        "avg_ctr": 0.013065511111111112,
+        "avg_roas": 9.634399910932975,
+        "top_countries": {
+          "US": 2465,
+          "IN": 1149,
+          "UK": 886
+        }
+      },
+      "insights": []
     }
   ],
   "campaign_stats": {
-    "low_ctr_count": 1
+    "low_ctr_count": 3
   },
   "last_run": {
-    "timestamp": "2025-11-29T12:16:38.960298Z",
+    "timestamp": "2025-12-01T21:12:15.047687Z",
     "summary": {
       "date_range": [
         "2025-01-01",
@@ -45,13 +113,6 @@
         "UK": 886
       }
     },
-    "insights": [
-      {
-        "issue": "Low CTR",
-        "value": 0.013065511111111112,
-        "threshold": 0.015,
-        "valid": true
-      }
-    ]
+    "insights": []
   }
 }
