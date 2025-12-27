@@ -104,7 +104,6 @@ make clean    # clear logs + reports
 
 ## Repo Map
 
-'''
 project/
 ├── config/
 │   ├── config.yaml
@@ -131,8 +130,8 @@ project/
 │   │   ├── creative_agent.py
 │   │   ├── creative_score_agent.py
 │   │   └── memory_agent.py
-│   ├── orchestrator/
-│   │   └── run.py
+│   └── orchestrator/
+│       └── run.py
 ├── tests/
 │   ├── test_planner_agent.py
 │   ├── test_data_agent.py
@@ -147,7 +146,6 @@ project/
 ├── Makefile
 ├── requirements.txt
 └── README.md
-'''
 
 ---
 
